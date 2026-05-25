@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Calendar AI Reminder",
+  "version": "1.0",
+  "description": "Te recuerda tus eventos importantes por mail",
+
+    "permissions": [
+        "identity",
+        "alarms",
+        "storage"
+    ],
+
+    "background" : {
+        "service_worker": "background.js"
+
+    },
+
+    "action" : {
+      "default_popup" : "popup_html"
+    }
+}
