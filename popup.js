@@ -15,6 +15,12 @@ function login(){
 
         status.textContent = "Conectado";
         const eventos = await obtenerEventos(token);
+        if(eventos && eventos.length > 0){
+            for(const evento of eventos){
+                await enviarAlBackend(evento, 'santiagogarnier5@gmail.com');
+            }
+        }
+        status.textContent = `${eventos.length} recordatorios enviados`;
         console.log("Eventos:", eventos);
     })
 }
@@ -34,4 +40,19 @@ async function obtenerEventos(token){
 
     const datos = await respuesta.json();
     return datos.items;
+}
+
+//fetch:desp de obtener los eventos, los mando al backend
+
+async function enviarAlBackend(evento,mail){
+    const respuesta = await fetch('http://localhost:3000/enviar-recordatorio', {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify ({evento,mail})
+    });
+
+    const datos = await respuesta.json();
+    return datos;
 }
