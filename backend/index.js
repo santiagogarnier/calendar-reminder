@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { google } = require('googleapis');
 const express = require('express');
 const app = express();
 
@@ -9,6 +10,16 @@ app.get('/',(req,res)=>{
 })
 
 const Anthropic = require('@anthropic-ai/sdk');
+const oauth2Client = new google.auth.OAuth2(
+  process.env.GMAIL_CLIENT_ID,
+  process.env.GMAIL_CLIENT_SECRET,
+   'https://developers.google.com/oauthplayground'  
+);
+
+oauth2Client.setCredentials({
+  refresh_token:process.env.GMAIL_REFRESH_TOKEN
+})
+
 const client = new Anthropic();
 
 app.post('/enviar-recordatorio', async (req, res) => {
@@ -30,6 +41,11 @@ app.post('/enviar-recordatorio', async (req, res) => {
     });
 
     const textoDeMail = mensaje.content[0].text;
+    await enviarMail(
+      email,
+      `Recordatorio: ${evento.summary}`,
+      textoDeMail
+    )
     console.log('Mail generado:', textoDeMail);
 
     res.json({ ok: true, mensaje: textoDeMail });
@@ -39,6 +55,27 @@ app.post('/enviar-recordatorio', async (req, res) => {
     res.status(500).json({ ok: false, error: error.message });
   }
 });
+
+async function enviarMail(destinatario, asunto, cuerpo) {
+  const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+
+  const mensaje = [
+    `To: ${destinatario}`,
+    `Subject: ${asunto}`,
+    'Content-Type: text/plain; charset=utf-8',
+    '',
+    cuerpo
+  ].join('\n');
+
+  const mensajeCodificado = Buffer.from(mensaje).toString('base64');
+
+  await gmail.users.messages.send({
+    userId: 'me',
+    requestBody: {
+      raw: mensajeCodificado
+    }
+  });
+}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=> {
