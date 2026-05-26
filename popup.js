@@ -1,4 +1,4 @@
-const btnlogin = document.getElementById("btn-login");
+const btnLogin = document.getElementById("btn-login");
 const status = document.getElementById("status");
 
 //Usuario clickea el boton 

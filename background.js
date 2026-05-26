@@ -1,8 +1,8 @@
-chrome.runtime.onInstalled.addListener(async({reason}) => {
+chrome.runtime.onInstalled.addListener(({reason}) => {
     if(reason != 'install') return;
 
 //Alarma que dispara cada 24 horas
-  await  chrome.alarms.create("revisar-calendario"), {
+    chrome.alarms.create("revisar-calendario"), {
         periodInMinutes: 1440
     }
 })
