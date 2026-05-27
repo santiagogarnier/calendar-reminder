@@ -45,7 +45,7 @@ async function obtenerEventos(token){
 //fetch:desp de obtener los eventos, los mando al backend
 
 async function enviarAlBackend(evento,mail){
-    const respuesta = await fetch('http://localhost:3000/enviar-recordatorio', {
+    const respuesta = await fetch('https://calendar-reminder-production.up.railway.app/enviar-recordatorio', {
         method: 'POST',
         headers: {
             'Content-Type' : 'application/json'
