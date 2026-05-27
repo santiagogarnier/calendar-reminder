@@ -17,45 +17,56 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
 async function revisarCalendario() {
     //Leo el token guardado
-    chrome.storage.local.get('token', async (resultado) => {
-        const token = resultado.token;
+    let token;
+    try {
+        token = await obtenerToken();
+    } catch (error) {
+        console.log("No se pudo obtener el token:", error.message);
+        return;
+    }
 
-        //si no hay token,quiere decir que el usuario no se logueo
-        if (!token) {
-            console.log("No hay token, el usuario no se logueo aun");
-            return;
-        }
+    console.log("Token encontrado, revisando calendario...");
 
-        console.log("Token encontrado, revisando calendario...");
+    const eventos = await obtenerEventos(token);
 
-        const eventos = await obtenerEventos(token);
+    if (eventos && eventos.length > 0) {
+        for (const evento of eventos) {
+            const fechaEvento = new Date(evento.start.dateTime || evento.start.date);
+            const hoy = new Date();
+            const diasRestantes = Math.ceil((fechaEvento - hoy) / (1000 * 60 * 60 * 24));
 
-        if (eventos && eventos.length > 0) {
-            for (const evento of eventos) {
-                const fechaEvento = new Date(evento.start.dateTime || evento.start.date);
-                const hoy = new Date();
-                const diasRestantes = Math.ceil((fechaEvento - hoy) / (1000 * 60 * 60 * 24));
-
-                let diasNotificacion = null;
-                if (diasRestantes <= 14 && diasRestantes > 10) {
-                    diasNotificacion = 14;
-                }else if( diasRestantes <= 7 && diasRestantes > 3){
-                    diasNotificacion = 7;
-                }
-
-                if(!diasNotificacion) continue;
-                const notificado = await fueNotificado (evento.id, diasNotificacion);
-                if(notificado){
-                    console.log(`Ya fue notificado (${diasNotificacion} dias): ${evento.summary}`);
-                    continue;
-                }
-
-                await enviarAlBackend(evento);
-                await marcarNotificado(evento.id, diasNotificacion);
-                console.log(`Mail enviado (${diasNotificacion} dias): ${evento.summary}`);
+            let diasNotificacion = null;
+            if (diasRestantes <= 14 && diasRestantes > 10) {
+                diasNotificacion = 14;
+            } else if (diasRestantes <= 7 && diasRestantes > 3) {
+                diasNotificacion = 7;
             }
-            console.log(`${eventos.length} recordatorios enviados`);
 
+            if (!diasNotificacion) continue;
+            const notificado = await fueNotificado(evento.id, diasNotificacion);
+            if (notificado) {
+                console.log(`Ya fue notificado (${diasNotificacion} dias): ${evento.summary}`);
+                continue;
+            }
+
+            await enviarAlBackend(evento);
+            await marcarNotificado(evento.id, diasNotificacion);
+            console.log(`Mail enviado (${diasNotificacion} dias): ${evento.summary}`);
         }
-    })
+        console.log(`${eventos.length} recordatorios enviados`);
+
+    }
+}
+
+
+async function obtenerToken() {
+    return new Promise((resolve, reject) => {
+        chrome.identity.getAuthToken({ interactive: false }, (token) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+                return;
+            }
+            resolve(token);
+        });
+    });
 }
