@@ -3,9 +3,9 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
     if (reason != 'install') return;
 
     //Alarma que dispara cada 24 horas
-    chrome.alarms.create("revisar-calendario"), {
-        periodInMinutes: 1440
-    }
+   chrome.alarms.create("revisar-calendario", {
+    periodInMinutes: 1440
+})
 })
 
 //Cuando la alarma se dispara, ejecutar la funcion principal

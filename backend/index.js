@@ -11,19 +11,19 @@ app.use(cors({
 }));
 app.use(express.json());
 
-app.get('/',(req,res)=>{
-    res.send('Backend funcionando');
+app.get('/', (req, res) => {
+  res.send('Backend funcionando');
 })
 
 const Anthropic = require('@anthropic-ai/sdk');
 const oauth2Client = new google.auth.OAuth2(
   process.env.GMAIL_CLIENT_ID,
   process.env.GMAIL_CLIENT_SECRET,
-   'https://developers.google.com/oauthplayground'  
+  'https://developers.google.com/oauthplayground'
 );
 
 oauth2Client.setCredentials({
-  refresh_token:process.env.GMAIL_REFRESH_TOKEN
+  refresh_token: process.env.GMAIL_REFRESH_TOKEN
 })
 
 const client = new Anthropic();
@@ -47,10 +47,21 @@ app.post('/enviar-recordatorio', async (req, res) => {
     });
 
     const textoDeMail = mensaje.content[0].text;
+
+    let textoFinal = textoDeMail;
+
+    const necesitaVideo = await requierePreparacion(evento.summary);
+    if (necesitaVideo) {
+      const video = await buscarVideoYoutube(`${evento.summary} guia estudio tutorial`);
+      if (video) {
+        textoFinal += `\n\nAcá te dejo un video que puede ayudarte:\n${video.titulo}\n${video.url}`;
+      }
+    }
+
     await enviarMail(
       email,
       `Recordatorio: ${evento.summary}`,
-      textoDeMail
+      textoFinal
     )
     console.log('Mail generado:', textoDeMail);
 
@@ -83,7 +94,42 @@ async function enviarMail(destinatario, asunto, cuerpo) {
   });
 }
 
+async function requierePreparacion(eventoSummary) {
+  const respuesta = await client.messages.create({
+    model: 'claude-sonnet-4-5',
+    max_tokens: 100,
+    messages: [
+      {
+        role: 'user',
+        content: `¿Este evento requiere preparación o aprendizaje? Respondé solo "si" o "no".
+        Evento: "${eventoSummary}"`
+      }
+    ]
+  });
+
+  const texto = respuesta.content[0].text.toLowerCase().trim();
+  return texto.includes('si') || texto.includes('sí');
+}
+
+async function buscarVideoYoutube(query) {
+  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&maxResults=1&type=video&key=${process.env.YOUTUBE_API_KEY}`;
+
+  const respuesta = await fetch(url);
+  const datos = await respuesta.json();
+
+  if (datos.items && datos.items.length > 0) {
+    const video = datos.items[0];
+    return {
+      titulo: video.snippet.title,
+      url: `https://www.youtube.com/watch?v=${video.id.videoId}`
+    };
+  }
+
+  return null;
+}
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, ()=> {
-    console.log(`Servidor corriendo en puerto ${PORT}`)
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`)
 })
+
