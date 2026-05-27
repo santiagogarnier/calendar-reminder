@@ -32,9 +32,17 @@ async function revisarCalendario() {
 
         if(eventos&&eventos.length > 0){
             for(const evento of eventos){
+                const notificados = await fueNotificado(evento.id);
+                if(notificados){
+                    console.log(`Ya fue notificado: ${evento.summary}`);
+                    continue;
+                }
                 await enviarAlBackend(evento);
+                await marcarNotificado(evento.id);
+                console.log(`Mail enviado: ${evento.summary}`)
             }
             console.log(`${eventos.length} recordatorios enviados`);
+            
         }
     })
 }

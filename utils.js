@@ -29,3 +29,16 @@ async function enviarAlBackend(evento,mail){
     const datos = await respuesta.json();
     return datos;
 }
+
+async function fueNotificado(eventoId) {
+    const resultado = await chrome.storage.local.get('eventosNotificados');
+    const notificados = resultado.eventosNotificados || []; //|| [] : si no existe todavia, que use un array vacio
+    return notificados.includes(eventoId);
+}
+
+async function marcarNotificado(eventoId){
+    const resultado = await chrome.storage.local.get('eventosNotificados');
+    const notificados = resultado.eventosNotificados || [];
+    notificados.push(eventoId);
+    await chrome.storage.local.set({eventosNotificados: notificados});
+}
