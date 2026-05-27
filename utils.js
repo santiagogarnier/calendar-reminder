@@ -30,15 +30,15 @@ async function enviarAlBackend(evento,mail){
     return datos;
 }
 
-async function fueNotificado(eventoId) {
+async function fueNotificado(eventoId,dias) {
     const resultado = await chrome.storage.local.get('eventosNotificados');
     const notificados = resultado.eventosNotificados || []; //|| [] : si no existe todavia, que use un array vacio
-    return notificados.includes(eventoId);
+    return notificados.includes(`${eventoId}_${dias}`);
 }
 
-async function marcarNotificado(eventoId){
+async function marcarNotificado(eventoId,dias){
     const resultado = await chrome.storage.local.get('eventosNotificados');
     const notificados = resultado.eventosNotificados || [];
-    notificados.push(eventoId);
+    notificados.push(`${eventoId}_${dias}`);
     await chrome.storage.local.set({eventosNotificados: notificados});
 }

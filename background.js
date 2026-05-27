@@ -30,19 +30,32 @@ async function revisarCalendario() {
 
         const eventos = await obtenerEventos(token);
 
-        if(eventos&&eventos.length > 0){
-            for(const evento of eventos){
-                const notificados = await fueNotificado(evento.id);
-                if(notificados){
-                    console.log(`Ya fue notificado: ${evento.summary}`);
+        if (eventos && eventos.length > 0) {
+            for (const evento of eventos) {
+                const fechaEvento = new Date(evento.start.dateTime || evento.start.date);
+                const hoy = new Date();
+                const diasRestantes = Math.ceil((fechaEvento - hoy) / (1000 * 60 * 60 * 24));
+
+                let diasNotificacion = null;
+                if (diasRestantes <= 14 && diasRestantes > 10) {
+                    diasNotificacion = 14;
+                }else if( diasRestantes <= 7 && diasRestantes > 3){
+                    diasNotificacion = 7;
+                }
+
+                if(!diasNotificacion) continue;
+                const notificado = await fueNotificado (evento.id, diasNotificacion);
+                if(notificado){
+                    console.log(`Ya fue notificado (${diasNotificacion} dias): ${evento.summary}`);
                     continue;
                 }
+
                 await enviarAlBackend(evento);
-                await marcarNotificado(evento.id);
-                console.log(`Mail enviado: ${evento.summary}`)
+                await marcarNotificado(evento.id, diasNotificacion);
+                console.log(`Mail enviado (${diasNotificacion} dias): ${evento.summary}`);
             }
             console.log(`${eventos.length} recordatorios enviados`);
-            
+
         }
     })
 }
