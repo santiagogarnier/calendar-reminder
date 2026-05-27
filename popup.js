@@ -17,7 +17,7 @@ function login(){
         const eventos = await obtenerEventos(token);
         if(eventos && eventos.length > 0){
             for(const evento of eventos){
-                await enviarAlBackend(evento, 'santiagogarnier5@gmail.com');
+              await enviarAlBackend(evento, 'santiagogarnier5@gmail.com');
             }
         }
         status.textContent = `${eventos.length} recordatorios enviados`;
@@ -50,7 +50,7 @@ async function enviarAlBackend(evento,mail){
         headers: {
             'Content-Type' : 'application/json'
         },
-        body: JSON.stringify ({evento,mail})
+        body: JSON.stringify({evento, email: 'santiagogarnier5@gmail.com'})
     });
 
     const datos = await respuesta.json();
