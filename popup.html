@@ -8,9 +8,13 @@
   <body>
     <h1>Calendar AI Reminder</h1>
 
-    <button id="btn-login">Conectar con Google</button>
+    <button id="btn-login">Conectar con Calendar</button>
 
-    <div id="status">No conectado</div>
+    <div id="estado-conectado" class="oculto">
+      <div id="status-ok">✅ Conectado</div>
+      <div id="enviando" class="oculto">⏳ Enviando ayuda...</div>
+      <div id="lista-eventos"></div>
+    </div>
 
     <script src="utils.js"></script>
     <script src="popup.js"></script>
