@@ -22,14 +22,14 @@
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
-    },
-    "oauth2": {
-      "client_id": "1003739751495-6ghv2aqnrdibcch356ac6r03g06l9t87.apps.googleusercontent.com",
-      "scopes": [
-        "https://www.googleapis.com/auth/calendar.readonly",
-        "https://www.googleapis.com/auth/gmail.send",
-        "https://www.googleapis.com/auth/userinfo.email"
-      ]
     }
+  },
+  "oauth2": {
+    "client_id": "1003739751495-6ghv2aqnrdibcch356ac6r03g06l9t87.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar.readonly",
+      "https://www.googleapis.com/auth/gmail.send",
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
   }
 }
