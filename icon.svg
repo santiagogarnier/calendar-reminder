@@ -1,0 +1,47 @@
+<svg width="200" height="200" viewBox="0 0 200 200" role="img">
+  <style>
+    .cal-body { fill: #4F8EF7; }
+    .cal-header { fill: #2563EB; }
+    .cal-inner { fill: #EFF6FF; }
+    .bell-body { fill: #FBBF24; }
+    .bell-dark { fill: #F59E0B; }
+    .dot { fill: #4F8EF7; }
+    .eye { fill: #1E3A8A; }
+    .cheek { fill: #FDA4AF; opacity: 0.7; }
+    .smile { fill: none; stroke: #1E3A8A; stroke-width: 2; stroke-linecap: round; }
+    .wave { fill: none; stroke: #FBBF24; stroke-linecap: round; }
+  </style>
+  <rect x="10" y="10" width="180" height="180" rx="36" fill="#EFF6FF"/>
+  <rect x="30" y="70" width="140" height="110" rx="12" class="cal-body"/>
+  <rect x="30" y="70" width="140" height="36" rx="12" class="cal-header"/>
+  <rect x="30" y="90" width="140" height="16" class="cal-header"/>
+  <rect x="68" y="60" width="12" height="22" rx="6" class="cal-header"/>
+  <rect x="120" y="60" width="12" height="22" rx="6" class="cal-header"/>
+  <rect x="44" y="116" width="112" height="54" rx="6" class="cal-inner"/>
+  <circle cx="64" cy="132" r="4" class="dot" opacity="0.3"/>
+  <circle cx="84" cy="132" r="4" class="dot" opacity="0.3"/>
+  <circle cx="104" cy="132" r="4" class="dot" opacity="0.3"/>
+  <circle cx="124" cy="132" r="4" class="dot" opacity="0.3"/>
+  <circle cx="144" cy="132" r="4" class="dot" opacity="0.3"/>
+  <circle cx="64" cy="152" r="4" class="dot" opacity="0.3"/>
+  <circle cx="84" cy="152" r="4" class="dot" opacity="0.3"/>
+  <circle cx="104" cy="152" r="4" class="dot" opacity="0.3"/>
+  <circle cx="124" cy="152" r="4" class="dot" opacity="0.3"/>
+  <circle cx="144" cy="152" r="4" class="dot" opacity="0.3"/>
+  <ellipse cx="100" cy="86" rx="30" ry="26" class="bell-body"/>
+  <ellipse cx="100" cy="64" rx="18" ry="12" class="bell-body"/>
+  <rect x="93" y="52" width="14" height="10" rx="5" class="bell-dark"/>
+  <ellipse cx="100" cy="110" rx="34" ry="8" class="bell-dark"/>
+  <circle cx="100" cy="120" r="6" class="bell-dark"/>
+  <circle cx="90" cy="86" r="3.5" class="eye"/>
+  <circle cx="110" cy="86" r="3.5" class="eye"/>
+  <circle cx="91" cy="84.5" r="1.2" fill="white"/>
+  <circle cx="111" cy="84.5" r="1.2" fill="white"/>
+  <ellipse cx="83" cy="94" rx="5" ry="3" class="cheek"/>
+  <ellipse cx="117" cy="94" rx="5" ry="3" class="cheek"/>
+  <path d="M88 96 Q100 105 112 96" class="smile"/>
+  <path d="M138 76 Q146 86 138 96" class="wave" stroke-width="2.5"/>
+  <path d="M145 70 Q157 86 145 102" class="wave" stroke-width="2" opacity="0.5"/>
+  <path d="M62 76 Q54 86 62 96" class="wave" stroke-width="2.5"/>
+  <path d="M55 70 Q43 86 55 102" class="wave" stroke-width="2" opacity="0.5"/>
+</svg>
