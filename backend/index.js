@@ -38,10 +38,17 @@ app.post('/enviar-recordatorio', async (req, res) => {
       messages: [
         {
           role: 'user',
-          content: `Sos un asistente que ayuda a las personas a prepararse para sus eventos importantes. 
+          content: `Sos un asistente que ayuda a las personas a prepararse para sus eventos importantes.
           El usuario tiene este evento próximo: "${evento.summary}" el día ${evento.start}.
-          Escribí un mail corto y amigable preguntándole cómo viene con la preparación para ese evento. 
-          Solo el cuerpo del mail, sin asunto.`
+          
+          Escribí un mail completo y útil en español que incluya:
+          1. Un saludo breve y personalizado según el tipo de evento
+          2. 3 o 4 consejos concretos y accionables para prepararse bien
+          3. Una lista de las cosas más importantes a tener en cuenta
+          4. Un cierre motivador
+          
+          El tono debe ser amigable pero directo. No hagas preguntas, dá información útil.
+          Solo el cuerpo del mail, sin asunto, sin saludos genéricos como "Espero que estés bien".`
         }
       ]
     });
