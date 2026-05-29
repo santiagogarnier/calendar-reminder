@@ -48,6 +48,7 @@ app.post('/enviar-recordatorio', async (req, res) => {
           4. Un cierre motivador
           
           El tono debe ser amigable pero directo. No hagas preguntas, dá información útil.
+          No uses markdown, asteriscos ni formato especial. Solo texto plano.
           Solo el cuerpo del mail, sin asunto, sin saludos genéricos como "Espero que estés bien".`
         }
       ]
